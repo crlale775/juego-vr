@@ -1,0 +1,192 @@
+========================================
+ VR BASKETBALL CHALLENGE - BETA 0.1
+ Aplicacion para Android (lentes VR tipo Cardboard)
+========================================
+
+ARCHIVO: VRBasketballChallenge.apk
+
+
+----------------------------------------
+COMO INSTALARLO EN EL CELULAR
+----------------------------------------
+
+1. Pasa el archivo VRBasketballChallenge.apk al telefono
+   (por cable USB, por WhatsApp a ti mismo, por Google Drive, etc.).
+
+2. En el telefono, abre el archivo. Android preguntara si permites
+   instalar aplicaciones de esta fuente: acepta
+   ("Permitir desde esta fuente" / "Instalar de todas formas").
+
+   Si no aparece el permiso:
+   Ajustes > Aplicaciones > Acceso especial > Instalar apps desconocidas
+   y activa tu explorador de archivos.
+
+3. Al abrir el juego por primera vez pedira permiso de CAMARA.
+   Hay que ACEPTARLO: sin ese permiso la camara no abre y la mano
+   no aparece. La camara que se usa es la TRASERA (la que apunta
+   hacia delante, la que NO esta en la pantalla).
+
+
+----------------------------------------
+LO IMPORTANTE: TODO SE MANEJA CON LA MANO
+----------------------------------------
+
+No hay mandos, ni control, ni nada externo. El unico "mando" es tu
+MANO delante de la camara trasera:
+
+  - Para elegir un boton del menu: pon la mano delante de la camara
+    y muevela hasta el boton. Aparece un circulo verde (el cursor) y
+    el boton se va llenando solo: cuando se llena, entra.
+  - Para apuntar al aro: mueve la mano a izquierda/derecha o arriba/abajo.
+  - Para lanzar: SUBE LA MANO DE GOLPE, desde abajo hacia arriba.
+
+Siempre se usa la DISPOSICION REAL de la mano: la camara trasera no
+se refleja, asi que la mano que tu mueves a la derecha en el mundo
+mueve el cursor a la derecha en el juego.
+
+
+----------------------------------------
+COMO SE LANZA (esto es lo importante)
+----------------------------------------
+
+En el juego VES TU MANO DIBUJADA (palma y dedos). Al lado tiene una
+BARRA con una FLECHA hacia arriba:
+
+Ahora hay VARIAS formas de lanzar y vale cualquiera de ellas (modo
+NATURAL). Usa la que te salga sola:
+
+  1. SUBIR LA MANO: subela de golpe de abajo hacia arriba, unos 20 cm
+     en medio segundo.
+  2. EMPUJAR: acerca la mano a la camara de golpe (se ve mas grande).
+  3. PUÑO Y ABRIR: cierra el puño un momento y abre la mano.
+  4. PELLIZCO: junta el pulgar y el indice y separalos de golpe.
+  5. TOQUE: toca la pantalla (esta forma siempre funciona).
+
+En el menu, el boton TIRO: ... cambia entre estas formas:
+  NATURAL (TODAS) -> valen las cuatro formas de la mano
+  SUBIR LA MANO / EMPUJAR / PUÑO Y ABRIR / PELLIZCO / TOQUE
+Elige una sola si con NATURAL te lanza sin querer.
+
+La barra verde que acompana a la mano se va llenando cuando el gesto
+se esta notando, y el aviso de la mano te dice que hacer.
+
+Avisos que te da la propia mano:
+  - "Sube la mano, empuja, cierra el puño y abrelo o pellizca" -> puedes
+     lanzar ya con cualquiera de las formas.
+  - "BALON EN JUEGO - espera"            -> el balon esta en el aire;
+     la barra se pone NARANJA. Espera a que vuelva a la mano.
+  - "GESTO SI - espera al balon"         -> hiciste bien el gesto pero
+     el balon estaba fuera. Se lanza solo en cuanto vuelve.
+  - "LANZADO"                            -> el tiro salio.
+
+Si el movimiento es lento y corto puede que no cuente: hazlo decidido.
+En los gestos de subir la mano y de empujar, vuelve a la posicion de
+partida despues de cada tiro para poder lanzar otra vez.
+
+
+----------------------------------------
+COMO SE JUEGA
+----------------------------------------
+
+1. Abre el juego SIN los lentes puestos, con el telefono en la mano.
+
+2. Ya NO hay escaneo de la mano al principio: el juego entra DIRECTAMENTE
+   al menu. La mano la va detectando una IA (MediaPipe) mientras juegas,
+   asi que no hay que medir ni calibrar nada.
+
+3. En el menu. Elige con la MANO delante de la camara trasera
+   (o, si prefieres, mirando fijo un segundo o tocando la pantalla):
+
+      INICIAR PARTIDA
+      MODO: CLASICO / MODO: HALLOWEEN  (calabazas, murcielagos, niebla)
+      TIRO: NATURAL (TODAS)  (elige como quieres lanzar)
+      RECENTRAR VISTA (si la vista sale torcida)
+      VISTA: ESTEREO / VISTA: UN OJO
+
+   Los botones tambien se pueden pulsar TOCANDO la pantalla con el dedo:
+   toca EMPEZAR (o cualquier modo) y entra. La mano delante de la camara
+   trasera sigue valiendo si prefieres no tocar nada.
+
+4. Elige INICIAR PARTIDA y mete el telefono en los lentes.
+   Dentro del juego: APUNTA Y LANZA CON LA MANO delante de la
+   camara trasera (la que queda mirando hacia delante). El toque en
+   la pantalla sigue valiendo como respaldo.
+
+
+----------------------------------------
+EL JUEGO
+----------------------------------------
+
+- El aro se mueve cada vez mas rapido y la cancha cambia de luz
+  de golpe (apagones, luz roja, intermitentes) para subir la dificultad.
+- 5 niveles. Se sube de nivel cada 3 encestes.
+- Puntos extra por racha y por encestar sin tocar el aro ("limpio").
+- Cada partida dura 75 segundos. El record se guarda en el telefono.
+- En MODO HALLOWEEN la cancha se llena de calabazas encendidas,
+  lapidas, murcielagos, telaranas y niebla morada, con truenos y aullidos.
+
+
+----------------------------------------
+REQUISITOS Y NOTAS
+----------------------------------------
+
+- Android 8.0 (API 26) o superior.
+- Solo funciona en telefonos de 64 bits (ARM64), que son practicamente todos.
+- No necesita internet ni conexion de datos: la IA de la mano (MediaPipe)
+  viaja dentro de la propia aplicacion.
+- La aplicacion pesa algo mas que antes (unos 15 MB mas por la IA de la mano).
+- Los lentes VR deben ser de tipo Cardboard (el telefono se mete adentro).
+- En telefonos de gama baja el juego puede ir justo: usa la vista de UN OJO
+  desde el menu solo para probar. Para jugar se usa la vista ESTEREO.
+
+
+----------------------------------------
+SI ALGO NO FUNCIONA
+----------------------------------------
+
+- NO APARECE LA MANO
+  * Revisa que aceptaste el permiso de camara
+    (Ajustes > Aplicaciones > VR Basketball Challenge > Permisos > Camara).
+  * El telefono tiene que tener la camara trasera libre (sin funda que la tape).
+  * Mas luz, la mano a 30-50 cm de la camara y entera dentro del encuadre.
+  * La mano se dibuja con sus 21 puntos (huesos y articulaciones): si ves
+    el esqueleto verde, la IA la esta viendo perfectamente.
+  * Si el movil es antiguo y la IA no arranca, el juego pasa solo al
+    detector por color de piel y sigue funcionando igual.
+
+- NO PUEDO ELEGIR EN EL MENU
+  * Pon la mano delante de la camara trasera mirando la pantalla; el
+    circulo verde es el cursor. Mantenla sobre el boton hasta que se
+    llene la barra.
+  * Respaldo: mira fijo un boton 1 segundo o toca la pantalla.
+
+- LANZA A VECES SI Y A VECES NO
+  * Mira el aviso de la mano: si dice "BALON EN JUEGO - espera", el
+    balon todavia no habia vuelto. El gesto se guarda y sale solo en
+    cuanto vuelve, pero lo suyo es esperar a que la barra este VERDE.
+  * Prueba el boton TIRO del menu: si con NATURAL (TODAS) te lanza sin
+    querer al mover la mano, deja solo una forma (EMPUJAR o PUÑO Y
+    ABRIR son las mas faciles de hacer a proposito).
+  * Los gestos de subir y empujar se notan mejor si los haces de golpe
+    partiendo de la posicion normal de la mano.
+  * Despues de lanzar, vuelve a la posicion de partida para poder
+    lanzar otra vez.
+  * El gesto depende de que la camara procese los fotogramas a tiempo:
+    procura que haya buena luz y que la mano se vea entera.
+
+- LA VISTA SALE TORCIDA O INCLINADA
+  * Pulsa el boton RECENTRAR VISTA del menu con el telefono ya en los lentes
+    y mirando al frente.
+
+- VA LENTO
+  * Cierra otras aplicaciones antes de jugar: el juego usa las dos vistas
+    (una por ojo) y la camara al mismo tiempo.
+
+- NO INSTALA
+  * Asegurate de aceptar la instalacion de fuentes desconocidas.
+  * Desinstala alguna version anterior del mismo juego si la habia.
+
+
+========================================
+Proyecto: VR Basketball Challenge - beta 0.1.0
+========================================

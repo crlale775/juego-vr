@@ -1,0 +1,34 @@
+# Unity generated
+VRBasketballChallenge/[Ll]ibrary/
+VRBasketballChallenge/[Tt]emp/
+VRBasketballChallenge/[Oo]bj/
+VRBasketballChallenge/[Bb]uild/
+VRBasketballChallenge/[Bb]uilds/
+VRBasketballChallenge/[Ll]ogs/
+VRBasketballChallenge/[Uu]serSettings/
+VRBasketballChallenge/.utmp/
+VRBasketballChallenge/*.log
+VRBasketballChallenge/*.csproj
+VRBasketballChallenge/*.sln
+VRBasketballChallenge/*.unityproj
+VRBasketballChallenge/*.user
+
+# Build / verify output at repo root
+*.log
+*.y4m
+_verificacion/*.png
+_verificacion/*.txt
+_verificacion/*.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vs/
+.idea/
+
+# Artefactos grandes que se pueden regenerar (no se suben a Git):
+# el APK se genera con BatchBuildAndroid y el resto son dependencias descargadas.
+Ejecutable_Android/*.apk
+
+# Dependencias de compilacion descargadas (se bajan con tools/mediapipe/build_jar.sh)
+VRBasketballChallenge/tools/mediapipe/libs/

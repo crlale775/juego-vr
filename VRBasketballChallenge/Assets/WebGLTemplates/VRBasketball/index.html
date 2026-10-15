@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>VR Basketball Challenge</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        color: #fff;
+        -webkit-user-select: none;
+        user-select: none;
+        touch-action: none;
+      }
+
+      /* El lienzo ocupa SIEMPRE toda la pantalla: es una vista de realidad virtual. */
+      #unity-canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+        background: #000;
+        outline: none;
+      }
+
+      #unity-loading-bar {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+        text-align: center;
+      }
+
+      #unity-logo {
+        width: 154px;
+        height: 130px;
+        margin: 0 auto 18px auto;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="%23e06c17"/><path d="M8 50h84M50 8v84M20 20c18 18 42 18 60 0M20 80c18-18 42-18 60 0" stroke="%23150a04" stroke-width="5" fill="none"/></svg>') center / contain no-repeat;
+      }
+
+      #unity-progress-bar-empty {
+        width: min(70vw, 420px);
+        height: 10px;
+        margin: 0 auto;
+        background: #26262b;
+        border-radius: 6px;
+        overflow: hidden;
+      }
+
+      #unity-progress-bar-full {
+        width: 0%;
+        height: 100%;
+        background: #ff9c34;
+        transition: width 0.2s ease;
+      }
+
+      #unity-warning {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        z-index: 50;
+        font-size: 14px;
+      }
+
+      #unity-warning div {
+        padding: 10px;
+        text-align: center;
+      }
+
+      /* Pantalla de arranque: el toque es obligatorio para poder usar la cámara,
+         los sensores y el audio en el celular. */
+      #vr-start {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        padding: 24px;
+        box-sizing: border-box;
+        text-align: center;
+        background: radial-gradient(circle at 50% 35%, #1a2033 0%, #05070d 75%);
+      }
+
+      #vr-start h1 {
+        margin: 0;
+        font-size: clamp(22px, 6vw, 44px);
+        letter-spacing: 1px;
+        color: #ff9c34;
+      }
+
+      #vr-start p {
+        margin: 0;
+        max-width: 620px;
+        font-size: clamp(13px, 3.4vw, 18px);
+        color: #c9d3e3;
+        line-height: 1.45;
+      }
+
+      #vr-start .small {
+        font-size: clamp(11px, 2.8vw, 14px);
+        color: #8f9bb0;
+      }
+
+      #vr-start-button {
+        margin-top: 10px;
+        padding: 16px 34px;
+        font-size: clamp(15px, 4vw, 20px);
+        font-weight: 700;
+        letter-spacing: 1px;
+        color: #06110a;
+        background: #58c06a;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      #vr-start-button:active {
+        background: #46a056;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="unity-warning"></div>
+
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+
+    <div id="unity-loading-bar">
+      <div id="unity-logo"></div>
+      <div id="unity-progress-bar-empty">
+        <div id="unity-progress-bar-full"></div>
+      </div>
+    </div>
+
+    <div id="vr-start">
+      <h1>VR BASKETBALL CHALLENGE</h1>
+      <p>Juego de baloncesto en realidad virtual para lentes tipo Cardboard.</p>
+      <p class="small">
+        1. Pulsa el botón y permite la cámara.<br>
+        2. La IA (MediaPipe) busca tu mano: no hay que escanear nada.<br>
+        3. Pon el teléfono en los lentes y lanza moviendo la mano.
+      </p>
+      <button id="vr-start-button">TOCA PARA EMPEZAR</button>
+      <p class="small">Si la vista sale girada, recarga con <b>?roll=90</b> al final de la dirección.</p>
+    </div>
+
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+      var started = false;
+
+      function unityShowBanner(msg, type) {
+        var warningBanner = document.querySelector("#unity-warning");
+        var div = document.createElement("div");
+        div.innerHTML = msg;
+        if (type == "error") {
+          div.style.background = "#b3261e";
+          div.style.color = "#fff";
+        } else {
+          div.style.background = "#ffcf5c";
+          div.style.color = "#241a00";
+          setTimeout(function () { if (div.parentNode) div.parentNode.removeChild(div); }, 6000);
+        }
+        warningBanner.appendChild(div);
+      }
+
+      // Ajustes para que el lienzo y el render usen un tamaño razonable en el teléfono.
+      var params = new URLSearchParams(location.search);
+      var dprParam = parseFloat(params.get("dpr"));
+      var devicePixelRatioLimit = isNaN(dprParam) ? 2 : dprParam;
+
+      var config = {
+        arguments: [],
+        dataUrl: "Build/{{{ DATA_FILENAME }}}",
+        frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+#if USE_WASM
+        codeUrl: "Build/{{{ CODE_FILENAME }}}",
+#endif
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: {{{ JSON.stringify(COMPANY_NAME) }}},
+        productName: {{{ JSON.stringify(PRODUCT_NAME) }}},
+        productVersion: {{{ JSON.stringify(PRODUCT_VERSION) }}},
+        devicePixelRatio: Math.min(window.devicePixelRatio || 1, devicePixelRatioLimit),
+        showBanner: unityShowBanner
+      };
+
+      // Meta viewport para que el juego ocupe toda la pantalla del teléfono.
+      (function () {
+        var meta = document.createElement("meta");
+        meta.name = "viewport";
+        meta.content = "width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover";
+        document.head.appendChild(meta);
+      })();
+
+      function startGame() {
+        if (started) {
+          return;
+        }
+        started = true;
+
+        document.querySelector("#vr-start").style.display = "none";
+        document.querySelector("#unity-loading-bar").style.display = "block";
+
+        // Pantalla completa y bloqueo horizontal (si el navegador lo permite).
+        try {
+          var el = document.documentElement;
+          if (el.requestFullscreen) {
+            el.requestFullscreen().catch(function () { });
+          }
+        } catch (e) { }
+        try {
+          if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock("landscape").catch(function () { });
+          }
+        } catch (e) { }
+
+        // Permiso de sensores (necesario en iOS 13 y posteriores).
+        try {
+          var D = window.DeviceOrientationEvent;
+          if (D && typeof D.requestPermission === "function") {
+            D.requestPermission().catch(function () { });
+          }
+        } catch (e) { }
+
+        var script = document.createElement("script");
+        script.src = "Build/{{{ LOADER_FILENAME }}}";
+        script.onload = function () {
+          createUnityInstance(canvas, config, function (progress) {
+            document.querySelector("#unity-progress-bar-full").style.width = (100 * progress) + "%";
+          }).then(function (unityInstance) {
+            document.querySelector("#unity-loading-bar").style.display = "none";
+            window.vrBasketballInstance = unityInstance;
+          }).catch(function (message) {
+            unityShowBanner("No se pudo cargar el juego: " + message, "error");
+          });
+        };
+        script.onerror = function () {
+          unityShowBanner("No se encontró el archivo del juego (Build/).", "error");
+        };
+        document.body.appendChild(script);
+      }
+
+      document.querySelector("#vr-start-button").addEventListener("click", startGame);
+
+      window.addEventListener("error", function (e) {
+        if (e && e.message) {
+          console.log("[VRBB] error de pagina: " + e.message);
+        }
+      });
+    </script>
+  </body>
+</html>
